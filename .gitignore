@@ -44,3 +44,5 @@
 .env
 
 /coverage/*
+
+.DS_Store
