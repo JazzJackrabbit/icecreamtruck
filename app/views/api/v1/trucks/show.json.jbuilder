@@ -4,12 +4,12 @@ json.data do
   json.revenue truck.revenue
   json.inventory do
     json.array!(truck.inventories) do |inventory|
-      json.quantity inventory.quantity
       json.product do 
         json.id inventory.product.id
         json.name inventory.product.name
         json.price inventory.product.price
       end
+      json.quantity inventory.quantity
     end
   end
 end
