@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :orders, only: [:show, :index, :create]
       resources :trucks, only: [:show, :index] do 
+        get '/inventory', to: 'product_inventories#index'
         put '/inventory', to: 'product_inventories#update'
       end
 

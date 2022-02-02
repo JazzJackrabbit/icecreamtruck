@@ -66,5 +66,18 @@ describe "PUT /api/v1/trucks/:id/inventory", type: :request do
     put "/api/v1/trucks/#{fake_truck_id}/inventory", params: params
     expect(response).to have_http_status(:not_found)
   end
+end
 
+describe "GET /api/v1/trucks/:id/inventory", type: :request do
+  let(:truck) { create(:truck, :with_products) }
+
+  before { get "/api/v1/trucks/#{truck.id}/inventory" }
+  it 'returns status code 200' do
+    expect(response).to have_http_status(:success)
+  end
+
+  it 'response contains information about truck inventory' do
+    data = JSON.parse(response.body)['data']
+    expect(data).to have_key('inventory')
+  end
 end

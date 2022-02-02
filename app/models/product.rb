@@ -4,5 +4,7 @@ class Product < ApplicationRecord
   
   belongs_to :category, class_name: 'ProductCategory', foreign_key: :product_category_id
 
-  validates :price, numericality: { greater_than_or_equal_to: 0 } 
+  validates :price, numericality: { greater_than_or_equal_to: 0 }
+
+  scope :stocked_in_truck, ->(truck_id) { includes(:inventories).where(inventories: { truck_id: truck_id.to_i, quantity: 1..Float::INFINITY })}
 end

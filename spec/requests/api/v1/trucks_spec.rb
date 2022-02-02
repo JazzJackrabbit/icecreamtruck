@@ -9,8 +9,8 @@ describe "GET /api/v1/trucks/:id", type: :request do
     expect(response).to have_http_status(:success)
   end
 
-  it 'response contains information about truck inventory' do
-    expect(JSON.parse(response.body)['data']).to have_key('inventory')
+  it 'response contains information about truck products' do
+    expect(JSON.parse(response.body)['data']).to have_key('products')
   end
 
   it 'response contains information about truck revenue' do

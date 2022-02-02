@@ -17,6 +17,10 @@ module TruckInventoryManagement
       @truck.inventories
     end
 
+    def products
+      Product.stocked_in_truck(@truck.id)
+    end
+
     def find(product_id)
       @truck.inventories.where(product_id: product_id).first
     end
@@ -36,6 +40,12 @@ module TruckInventoryManagement
       abs_quantity = quantity.to_i.abs
       inventory.quantity -= abs_quantity
       inventory.save!
+    end
+
+    def destroy(product_id)
+      inventory = @truck.inventories.where(product_id: product_id).first 
+      raise AppErrors::InventoryErrors::ProductInventoryNotFoundError unless inventory.present?
+      inventory.destroy
     end
 
     def set(product_id, quantity)
