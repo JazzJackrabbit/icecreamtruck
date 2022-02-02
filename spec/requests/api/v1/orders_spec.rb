@@ -1,11 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Orders", type: :request do
-  describe "POST api/v1/orders (create order)" do
+  describe "POST api/v1/orders" do
     let(:truck) { create :truck, :with_products }
-
+    let(:inventory) { truck.inventories.first }
     it "returns a successful response when creating an order" do
-      inventory =  truck.inventories.first
       order_params = {
         truck_id: truck.id,
         products: [ 
@@ -22,7 +21,6 @@ RSpec.describe "Api::V1::Orders", type: :request do
     end
 
     it "returns an error response when product inventory is insufficient" do
-      inventory =  truck.inventories.first
       order_params = {
         truck_id: truck.id,
         products: [ 
@@ -52,6 +50,60 @@ RSpec.describe "Api::V1::Orders", type: :request do
 
       post "/api/v1/orders", params: order_params
       expect(response).to have_http_status(:bad_request)
+    end
+  end
+
+  describe "GET api/v1/orders" do
+    let(:truck) { create :truck, :with_orders }
+    let(:truck_two) { create :truck, :with_orders }    
+    before { get "/api/v1/orders" }
+
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(:success)
+    end
+  
+    it 'response contains orders information' do
+      expect(JSON.parse(response.body)['data']).to have_key('orders')
+    end
+
+    it 'response does not contain detailed order information (skips products)' do
+      orders = JSON.parse(response.body)['data']['orders']
+
+      orders.each do |order|
+        expect(order).not_to have_key('products')
+      end
+    end
+
+    it "returns a list of orders filtered by truck id", :skip_before_hook do
+      get "/api/v1/orders", params: { by_truck: truck.id }
+      orders = JSON.parse(response.body)['data']['orders']
+
+      orders.each do |order|
+        expect(order['truck_id']).to eq(truck.id)
+      end
+    end
+  end
+
+  describe "GET api/v1/orders/:id" do
+    let(:truck) { create :truck, :with_orders }
+    let(:order) { truck.orders.first }
+
+    before { get "/api/v1/orders/#{order.id}" }
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(:success)
+    end
+  
+    it 'response contains order information' do
+      data = JSON.parse(response.body)['data']
+      expect(data).to have_key('order')
+      expect(data['order']['id']).to eq(order.id)
+    end
+
+    it "response contains detailed order information (includes products)" do
+      data = JSON.parse(response.body)['data']
+      expect(data['order']).to have_key('products')
     end
   end
 

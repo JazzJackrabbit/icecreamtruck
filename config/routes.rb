@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
-      resources :orders, only: [:create]
+      resources :orders, only: [:show, :index, :create]
       resources :trucks, only: [:show, :index]
 
       match "*path", to: "api#route_not_found", via: :all

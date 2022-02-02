@@ -9,6 +9,8 @@ class Order < ApplicationRecord
   validates_presence_of :items
   validates :items, length: { minimum: 1, message: "are required. Add at least one." }
 
+  scope :by_truck, -> (truck_id) { where(truck_id: truck_id) }
+
   def add_items(item_array)
     item_array.each do |item_hash|
       add_item item_hash[:id], item_hash[:quantity]
