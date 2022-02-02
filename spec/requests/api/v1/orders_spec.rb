@@ -7,9 +7,9 @@ RSpec.describe "Api::V1::Orders", type: :request do
     it "returns a successful response when creating an order" do
       order_params = {
         truck_id: truck.id,
-        products: [ 
+        items_attributes: [ 
           {
-            id: inventory.product_id,
+            product_id: inventory.product_id,
             quantity: inventory.quantity
           } 
         ]
@@ -23,7 +23,7 @@ RSpec.describe "Api::V1::Orders", type: :request do
     it "returns an error response when product inventory is insufficient" do
       order_params = {
         truck_id: truck.id,
-        products: [ 
+        items_attributes: [ 
           {
             id: inventory.product_id,
             quantity: inventory.quantity+1
@@ -40,9 +40,9 @@ RSpec.describe "Api::V1::Orders", type: :request do
 
       order_params = {
         truck_id: truck.id,
-        products: [
+        items_attributes: [
           {
-            id: product.id,
+            product_id: product.id,
             quantity: 1
           } 
         ]
