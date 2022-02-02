@@ -9,6 +9,7 @@ module TruckInventoryManagement
 
     def self.from_truck_id(truck_id)
       truck = Truck.find(truck_id)
+      raise AppErrors::InventoryErrors::TruckNotFoundError unless truck.present?
       self.new(truck)
     end
 
@@ -26,6 +27,7 @@ module TruckInventoryManagement
       abs_quantity = quantity.to_i.abs
       inventory.quantity += abs_quantity
       inventory.save!
+      inventory
     end
 
     def remove(product_id, quantity)
@@ -37,10 +39,11 @@ module TruckInventoryManagement
     end
 
     def set(product_id, quantity)
-      inventory = @truck.inventories.where(product_id: product_id).first || 
-                  @truck.inventories.new(product_id: product_id)
+      inventory = @truck.inventories.where(product_id: product_id.to_i).first || 
+                  @truck.inventories.new(product_id: product_id.to_i)
       inventory.quantity = quantity.to_i
       inventory.save!
+      inventory
     end
   end
 end

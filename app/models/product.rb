@@ -4,5 +4,5 @@ class Product < ApplicationRecord
   
   belongs_to :category, class_name: 'ProductCategory', foreign_key: :product_category_id
 
-  validates :price, numericality: { greater_than_or_equal_to: 0 }  
+  validates :price, numericality: { greater_than_or_equal_to: 0 } 
 end

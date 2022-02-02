@@ -1,0 +1,4 @@
+json.truck_id product_inventory.truck_id
+json.product_id product_inventory.product_id
+json.quantity product_inventory.quantity
+json.updated_at product_inventory.updated_at.iso8601

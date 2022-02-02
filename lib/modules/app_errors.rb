@@ -17,5 +17,6 @@ module AppErrors
 
   module InventoryErrors
     class ProductInventoryNotFoundError < AppError; end
+    class TruckNotFoundError < AppError; end
   end
 end

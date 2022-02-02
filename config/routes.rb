@@ -4,7 +4,9 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       resources :orders, only: [:show, :index, :create]
-      resources :trucks, only: [:show, :index]
+      resources :trucks, only: [:show, :index] do 
+        put '/inventory', to: 'product_inventories#update'
+      end
 
       match "*path", to: "api#route_not_found", via: :all
     end

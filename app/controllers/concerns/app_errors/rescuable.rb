@@ -26,6 +26,10 @@ module AppErrors
       rescue_from AppErrors::InventoryErrors::ProductInventoryNotFoundError do |e|
         json_response({message: "SO SORRY!"}, :bad_request)
       end
+
+      rescue_from AppErrors::InventoryErrors::TruckNotFoundError do |e|
+        json_response({message: "Truck with such ID could not be found"}, :not_found)
+      end
     end
 
     protected
