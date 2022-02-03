@@ -7,4 +7,8 @@ class Product < ApplicationRecord
   validates :price, numericality: { greater_than_or_equal_to: 0 }
 
   scope :stocked_in_truck, ->(truck_id) { includes(:inventories).where(inventories: { truck_id: truck_id.to_i, quantity: 1.. })}
+
+  scope :by_label, ->(label) { where(':label = ANY(labels)', label: label) }
+
+  before_save { labels.uniq! if labels_changed? }
 end

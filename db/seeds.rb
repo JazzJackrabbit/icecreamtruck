@@ -17,7 +17,7 @@ p "Created #{category.name} category"
 
 ice_cream_flavors = ['Chocolate', 'Pistachio', 'Strawberry', 'Mint']
 ice_cream_flavors.each do |flavor|
-  product = Product.create(category: category, name: "#{flavor} Ice Cream", price: rand(1.00..10.00))
+  product = Product.create(category: category, name: "#{flavor} Ice Cream", price: rand(1.00..10.00), labels: [flavor.downcase])
   p "Created '#{product.name}' product"
   quantity = 200
   truck.inventory.add(product.id, quantity)

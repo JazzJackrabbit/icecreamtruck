@@ -40,6 +40,16 @@ RSpec.describe Product, type: :model do
       expect(Product.stocked_in_truck(truck.id).map(&:id)).to eq([in_stock_product.id])
     end
   end
+
+  describe ".scopes" do
+    it "can be searched by label" do
+      product_one = create :product, labels: ['mint']
+      product_two = create :product, labels: ['chocolate']
+
+      expect(Product.by_label('mint')).to include(product_one)
+      expect(Product.by_label('mint')).not_to include(product_two)
+    end
+  end
   
   describe ".properties" do
     it "has a name" do
@@ -48,6 +58,19 @@ RSpec.describe Product, type: :model do
 
     it "has a price" do
       expect(product.price).to eq(1.99)
+    end
+
+    context 'has many labels' do
+      it "as an array" do
+        product.labels << 'mint'
+        expect(product.labels).to eq(['mint'])
+      end
+
+      it "which are are unique" do
+        product.labels = ['mint','mint','strawberry']
+        product.save
+        expect(product.labels).to eq(['mint', 'strawberry'])
+      end
     end
   end
   
