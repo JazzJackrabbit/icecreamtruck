@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'auth_helper'
 
 RSpec.describe "Api::V1::Orders", type: :request do
   describe "POST api/v1/truck/:truck_id/orders" do
@@ -51,56 +52,82 @@ RSpec.describe "Api::V1::Orders", type: :request do
   end
 
   describe "GET /api/v1/trucks/:truck_id/orders" do
-    let(:truck) { create :truck, :with_orders }
-    let(:truck_two) { create :truck, :with_orders }    
+    before { 
+      @truck = create :truck, :with_orders
+      merchant = create :merchant
+      login(merchant)
+      @auth_params = get_auth_params_from_login_response_headers(response)
+    }
+
+    context "when authenticated" do
+      before { get "/api/v1/trucks/#{@truck.id}/orders", headers: @auth_params }  
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(:success)
+      end
     
-    before { get "/api/v1/trucks/#{truck.id}/orders" }
+      it 'response contains orders information' do
+        expect(JSON.parse(response.body)['data']).to have_key('orders')
+      end
 
-    it 'returns status code 200' do
-      expect(response).to have_http_status(:success)
-    end
-  
-    it 'response contains orders information' do
-      expect(JSON.parse(response.body)['data']).to have_key('orders')
-    end
+      it 'response does not contain detailed order information (skips products)' do
+        orders = JSON.parse(response.body)['data']['orders']
 
-    it 'response does not contain detailed order information (skips products)' do
-      orders = JSON.parse(response.body)['data']['orders']
+        orders.each do |order|
+          expect(order).not_to have_key('products')
+        end
+      end
 
-      orders.each do |order|
-        expect(order).not_to have_key('products')
+      it "response contains pagination data" do
+        get "/api/v1/trucks/#{@truck.id}/orders", headers: @auth_params, params: { per_page: 1 }
+        data = JSON.parse(response.body)['data']
+        expect(data).to have_key('meta')
+        expect(data['meta']['page']).to eq(1)
+        expect(data['meta']['total_pages']).to eq(@truck.orders.count)
       end
     end
 
-    it "response contains pagination data", :skip_before_filter do
-      get "/api/v1/trucks/#{truck.id}/orders", params: { per_page: 1 }
-      data = JSON.parse(response.body)['data']
-      expect(data).to have_key('meta')
-      expect(data['meta']['page']).to eq(1)
-      expect(data['meta']['total_pages']).to eq(truck.orders.count)
+    context "when not authenticated" do
+      it 'returns status code 401' do
+        get "/api/v1/trucks/#{@truck.id}/orders"
+        expect(response).to have_http_status(:unauthorized)
+      end
     end
   end
 
   describe "GET api/v1/trucks/:truck_id/orders/:id" do
-    let(:truck) { create :truck, :with_orders }
-    let(:order) { truck.orders.first }
+    before(:all) { 
+      @truck = create :truck, :with_orders
+      @order = @truck.orders.first
+      merchant = create :merchant
+      login(merchant)
+      @auth_params = get_auth_params_from_login_response_headers(response)
+    }
 
-    before { get "/api/v1/trucks/#{truck.id}/orders/#{order.id}" }
+    context "when authenticated" do
+      before { get "/api/v1/trucks/#{@truck.id}/orders/#{@order.id}", headers: @auth_params }
 
-    it 'returns status code 200' do
-      expect(response).to have_http_status(:success)
+      it 'returns status code 200' do
+        expect(response).to have_http_status(:success)
+      end
+    
+      it 'response contains order information' do
+        data = JSON.parse(response.body)['data']
+        expect(data).to have_key('order')
+        expect(data['order']['id']).to eq(@order.id)
+      end
+
+      it "response contains detailed order information (includes products)" do
+        data = JSON.parse(response.body)['data']
+        expect(data['order']).to have_key('products')
+      end
     end
-  
-    it 'response contains order information' do
-      data = JSON.parse(response.body)['data']
-      expect(data).to have_key('order')
-      expect(data['order']['id']).to eq(order.id)
-    end
 
-    it "response contains detailed order information (includes products)" do
-      data = JSON.parse(response.body)['data']
-      expect(data['order']).to have_key('products')
+    context "when not authenticated" do
+      it 'returns status code 401' do
+        get "/api/v1/trucks/#{@truck.id}/orders/#{@order.id}"
+        expect(response).to have_http_status(:unauthorized)
+      end
     end
   end
-
 end

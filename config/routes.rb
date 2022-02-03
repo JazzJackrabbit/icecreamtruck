@@ -3,6 +3,11 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
+      mount_devise_token_auth_for 'Merchant', at: 'auth', controllers: { 
+        registrations: 'api/v1/devise/merchant_registrations',
+        sessions: 'api/v1/devise/merchant_sessions',
+      }
+      
       resources :trucks, only: [:show, :index] do
         resources :orders, only: [:show, :index, :create]
         

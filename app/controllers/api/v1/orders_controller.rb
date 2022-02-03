@@ -1,5 +1,7 @@
 class Api::V1::OrdersController < Api::V1::ApiController
   include Api::V1::ModelPageable
+  include Api::V1::MerchantAuthenticatable
+  before_action :authenticate_merchant!, only: [:show, :index]
 
   # GET /api/v1/trucks/:truck_id/orders/:id
   def show
