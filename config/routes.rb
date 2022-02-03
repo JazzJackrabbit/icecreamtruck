@@ -9,11 +9,12 @@ Rails.application.routes.draw do
       }
       
       resources :trucks, only: [:show, :index] do
-        resources :orders, only: [:show, :index, :create]
+        resources :orders, only: [:index, :create]
         
         get '/inventory', to: 'product_inventories#index'
         put '/inventory', to: 'product_inventories#update'
       end
+      get '/orders/:id', to: 'orders#show'
 
       match "*path", to: "api#route_not_found", via: :all
     end

@@ -102,15 +102,15 @@ RSpec.describe "Api::V1::Orders", type: :request do
 
   describe "GET api/v1/trucks/:truck_id/orders/:id" do
     before(:all) { 
-      @truck = create :truck, :with_orders
-      @order = @truck.orders.first
+      truck = create :truck, :with_orders
+      @order = truck.orders.first
       merchant = create :merchant
       login(merchant)
       @auth_params = get_auth_params_from_login_response_headers(response)
     }
 
     context "when authenticated" do
-      before { get "/api/v1/trucks/#{@truck.id}/orders/#{@order.id}", headers: @auth_params }
+      before { get "/api/v1/orders/#{@order.id}", headers: @auth_params }
 
       it 'returns status code 200' do
         expect(response).to have_http_status(:success)
@@ -130,7 +130,7 @@ RSpec.describe "Api::V1::Orders", type: :request do
 
     context "when not authenticated" do
       it 'returns status code 401' do
-        get "/api/v1/trucks/#{@truck.id}/orders/#{@order.id}"
+        get "/api/v1/orders/#{@order.id}"
         expect(response).to have_http_status(:unauthorized)
       end
     end

@@ -3,7 +3,7 @@ class Api::V1::OrdersController < Api::V1::ApiController
   include Api::V1::MerchantAuthenticatable
   before_action :authenticate_merchant!, only: [:show, :index]
 
-  # GET /api/v1/trucks/:truck_id/orders/:id
+  # GET /api/v1/orders/:id
   def show
     @order = Order.find(params[:id])
     render_template 'show', order: @order
