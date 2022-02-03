@@ -1,5 +1,5 @@
 class Truck < ApplicationRecord
-  include TruckInventoryManagement
+  include InventoryManager
 
   has_many :inventories, class_name: 'ProductInventory', foreign_key: :truck_id
   has_many :products, through: :inventories

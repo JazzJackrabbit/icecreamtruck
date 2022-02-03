@@ -1,4 +1,4 @@
-module TruckInventoryManagement
+module InventoryManager
   extend ActiveSupport::Concern
   include AppErrors::InventoryErrors
   
@@ -34,6 +34,14 @@ module TruckInventoryManagement
       inventory
     end
 
+    def set(product_id, quantity)
+      inventory = @truck.inventories.where(product_id: product_id.to_i).first || 
+                  @truck.inventories.new(product_id: product_id.to_i)
+      inventory.quantity = quantity.to_i
+      inventory.save!
+      inventory
+    end
+
     def remove(product_id, quantity)
       inventory = @truck.inventories.where(product_id: product_id).first 
       raise AppErrors::InventoryErrors::ProductInventoryNotFoundError unless inventory.present?
@@ -46,14 +54,6 @@ module TruckInventoryManagement
       inventory = @truck.inventories.where(product_id: product_id).first 
       raise AppErrors::InventoryErrors::ProductInventoryNotFoundError unless inventory.present?
       inventory.destroy
-    end
-
-    def set(product_id, quantity)
-      inventory = @truck.inventories.where(product_id: product_id.to_i).first || 
-                  @truck.inventories.new(product_id: product_id.to_i)
-      inventory.quantity = quantity.to_i
-      inventory.save!
-      inventory
     end
   end
 end

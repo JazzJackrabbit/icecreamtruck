@@ -1,5 +1,5 @@
 class ProductInventory < ApplicationRecord
-  include TruckInventoryManagement
+  include InventoryManager
   include AppErrors::InventoryErrors
 
   MIN_QUANTITY = 0
