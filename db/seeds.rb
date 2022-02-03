@@ -51,18 +51,6 @@ p "Added #{quantity} units of #{product.name} to Truck##{truck.id} inventory"
 
 
 
-#  ========= INITIALIZE SNACK PRODUCTS ============
-
-category = ProductCategory.create(name: 'Snack')
-p "Created #{category.name} category"
-
-product = Product.create(category: category, name: "Caramel Bar", price: rand(1.00..10.00))
-p "Created '#{product.name}' product"
-quantity = 10
-truck.inventory.add(product.id, quantity)
-p "Added #{quantity} units of #{product.name} to Truck##{truck.id} inventory"
-
-
 
 #  ========= INITIALIZE MERCHANT ============
 
