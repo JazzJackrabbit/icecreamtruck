@@ -5,7 +5,7 @@ class ProductInventory < ApplicationRecord
   MIN_QUANTITY = 0
   # MAX_QUANTITY = 10000
 
-  belongs_to :truck
+  belongs_to :truck, touch: true
   belongs_to :product
   
   validates_uniqueness_of :truck_id, scope: [:product_id]
@@ -15,7 +15,7 @@ class ProductInventory < ApplicationRecord
               greater_than_or_equal_to: MIN_QUANTITY
             }
 
-  scope :in_stock, -> (){ where(quantity: 1..Float::INFINITY) }
+  scope :in_stock, -> (){ where(quantity: 1..) }
   scope :out_of_stock, -> () { where(quantity: 0) }
   # scope :by_quantity, -> (min = MIN_QUANTITY, max = MAX_QUANTITY) { quantity: min..max }
 
