@@ -1,5 +1,6 @@
 json.cache! ['api', 'v1', orders], expires_in: 1.hour do
   json.data do 
+    json.total_revenue truck.revenue
     json.orders do
       json.array!(orders) do |order|
         json.partial! partial: 'api/v1/orders/order', locals: {order: order}

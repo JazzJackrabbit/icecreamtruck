@@ -13,10 +13,6 @@ describe "GET /api/v1/trucks/:id", type: :request do
     expect(JSON.parse(response.body)['data']).to have_key('products')
   end
 
-  it 'response contains information about truck revenue' do
-    expect(JSON.parse(response.body)['data']).to have_key('revenue')
-  end
-
   it 'returns a 404 response when truck is not found by id', :skip_before_hook do
     fake_id = 123
 

@@ -4,7 +4,7 @@ class Api::V1::ProductInventoriesController < Api::V1::ApiController
 
   # GET /api/v1/trucks/:truck_id/inventory
   def index
-    @product_inventories = ProductInventory::InventoryManager.from_truck_id(params[:truck_id]).list
+    @product_inventories = ProductInventory::InventoryManager.from_truck_id(params[:truck_id]).list.includes(:product)
     render_template 'index', product_inventories: @product_inventories
   end
 

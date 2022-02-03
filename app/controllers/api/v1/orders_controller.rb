@@ -12,9 +12,10 @@ class Api::V1::OrdersController < Api::V1::ApiController
   # GET /api/v1/trucks/:truck_id/orders
   def index
     page, per_page = sanitize_page_params(params)
-    @orders = Order.by_truck(params[:truck_id]).order(created_at: :desc).page(page).per(per_page)
+    @orders = Order.includes(:truck).by_truck(params[:truck_id]).order(created_at: :desc).page(page).per(per_page)
+    truck = @orders.first.truck
     add_pagination_data(@orders, page, per_page)
-    render_template 'index', orders: @orders
+    render_template 'index', orders: @orders, truck: truck
   end
 
   # POST /api/v1/trucks/:truck_id/orders

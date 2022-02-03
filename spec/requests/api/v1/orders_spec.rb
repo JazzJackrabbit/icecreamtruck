@@ -85,6 +85,11 @@ RSpec.describe "Api::V1::Orders", type: :request do
         expect(data['meta']['page']).to eq(1)
         expect(data['meta']['total_pages']).to eq(@truck.orders.count)
       end
+
+      it 'response contains information about truck revenue' do
+        data = JSON.parse(response.body)['data']
+        expect(data).to have_key('total_revenue')
+      end
     end
 
     context "when not authenticated" do
