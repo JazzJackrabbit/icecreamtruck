@@ -1,11 +1,13 @@
 class Api::V1::OrdersController < Api::V1::ApiController
   include Api::V1::ModelPageable
 
+  # GET /api/v1/trucks/:truck_id/orders/:id
   def show
     @order = Order.find(params[:id])
     render_template 'show', order: @order
   end
 
+  # GET /api/v1/trucks/:truck_id/orders
   def index
     page, per_page = sanitize_page_params(params)
     @orders = Order.by_truck(params[:truck_id]).order(created_at: :desc).page(page).per(per_page)
@@ -13,6 +15,7 @@ class Api::V1::OrdersController < Api::V1::ApiController
     render_template 'index', orders: @orders
   end
 
+  # POST /api/v1/trucks/:truck_id/orders
   def create
     @order = Order.new(order_params)   
     if @order.save
