@@ -3,8 +3,9 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
-      resources :orders, only: [:show, :index, :create]
-      resources :trucks, only: [:show, :index] do 
+      resources :trucks, only: [:show, :index] do
+        resources :orders, only: [:show, :index, :create]
+        
         get '/inventory', to: 'product_inventories#index'
         put '/inventory', to: 'product_inventories#update'
       end

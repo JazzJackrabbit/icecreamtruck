@@ -1,12 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Orders", type: :request do
-  describe "POST api/v1/orders" do
+  describe "POST api/v1/truck/:truck_id/orders" do
     let(:truck) { create :truck, :with_products }
     let(:inventory) { truck.inventories.first }
     it "returns a successful response when creating an order" do
       order_params = {
-        truck_id: truck.id,
         items_attributes: [ 
           {
             product_id: inventory.product_id,
@@ -15,14 +14,13 @@ RSpec.describe "Api::V1::Orders", type: :request do
         ]
       }
 
-      post "/api/v1/orders", params: order_params
+      post "/api/v1/trucks/#{truck.id}/orders", params: order_params
       expect(response).to have_http_status(:success)
       expect(JSON.parse(response.body)['message']).to match(/ENJOY!/)
     end
 
     it "returns an error response when product inventory is insufficient" do
       order_params = {
-        truck_id: truck.id,
         items_attributes: [ 
           {
             id: inventory.product_id,
@@ -30,7 +28,7 @@ RSpec.describe "Api::V1::Orders", type: :request do
           } 
         ]
       }
-      post "/api/v1/orders", params: order_params
+      post "/api/v1/trucks/#{truck.id}/orders", params: order_params
       expect(response).to have_http_status(:bad_request)
       expect(JSON.parse(response.body)['message']).to match(/SO SORRY!/)
     end
@@ -39,7 +37,6 @@ RSpec.describe "Api::V1::Orders", type: :request do
       product = create :product
 
       order_params = {
-        truck_id: truck.id,
         items_attributes: [
           {
             product_id: product.id,
@@ -48,16 +45,16 @@ RSpec.describe "Api::V1::Orders", type: :request do
         ]
       }
 
-      post "/api/v1/orders", params: order_params
+      post "/api/v1/trucks/#{truck.id}/orders", params: order_params
       expect(response).to have_http_status(:bad_request)
     end
   end
 
-  describe "GET api/v1/orders" do
+  describe "GET /api/v1/trucks/:truck_id/orders" do
     let(:truck) { create :truck, :with_orders }
     let(:truck_two) { create :truck, :with_orders }    
-    before { get "/api/v1/orders" }
-
+    
+    before { get "/api/v1/trucks/#{truck.id}/orders" }
 
     it 'returns status code 200' do
       expect(response).to have_http_status(:success)
@@ -75,30 +72,20 @@ RSpec.describe "Api::V1::Orders", type: :request do
       end
     end
 
-    it "returns a list of orders filtered by truck id", :skip_before_hook do
-      get "/api/v1/orders", params: { by_truck: truck.id }
-      orders = JSON.parse(response.body)['data']['orders']
-
-      orders.each do |order|
-        expect(order['truck_id']).to eq(truck.id)
-      end
-    end
-
     it "response contains pagination data", :skip_before_filter do
-      get "/api/v1/orders", params: { per_page: 1 }
-
+      get "/api/v1/trucks/#{truck.id}/orders", params: { per_page: 1 }
       data = JSON.parse(response.body)['data']
       expect(data).to have_key('meta')
       expect(data['meta']['page']).to eq(1)
-      expect(data['meta']['total_pages']).to eq(Order.count)
+      expect(data['meta']['total_pages']).to eq(truck.orders.count)
     end
   end
 
-  describe "GET api/v1/orders/:id" do
+  describe "GET api/v1/trucks/:truck_id/orders/:id" do
     let(:truck) { create :truck, :with_orders }
     let(:order) { truck.orders.first }
 
-    before { get "/api/v1/orders/#{order.id}" }
+    before { get "/api/v1/trucks/#{truck.id}/orders/#{order.id}" }
 
     it 'returns status code 200' do
       expect(response).to have_http_status(:success)
