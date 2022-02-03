@@ -83,6 +83,15 @@ RSpec.describe "Api::V1::Orders", type: :request do
         expect(order['truck_id']).to eq(truck.id)
       end
     end
+
+    it "response contains pagination data", :skip_before_filter do
+      get "/api/v1/orders", params: { per_page: 1 }
+
+      data = JSON.parse(response.body)['data']
+      expect(data).to have_key('meta')
+      expect(data['meta']['page']).to eq(1)
+      expect(data['meta']['total_pages']).to eq(Order.count)
+    end
   end
 
   describe "GET api/v1/orders/:id" do

@@ -44,4 +44,13 @@ describe "GET /api/v1/trucks", type: :request do
   it 'response contains a list of trucks' do
     expect(JSON.parse(response.body)['data']).to have_key('trucks')
   end
+
+  it "response contains pagination data", :skip_before_filter do
+    get "/api/v1/trucks", params: { per_page: 1 }
+
+    data = JSON.parse(response.body)['data']
+    expect(data).to have_key('meta')
+    expect(data['meta']['page']).to eq(1)
+    expect(data['meta']['total_pages']).to eq(Truck.count)
+  end
 end

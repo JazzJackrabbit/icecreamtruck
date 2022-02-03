@@ -5,4 +5,5 @@ json.data do
       json.name truck.name
     end
   end
+  json.partial! partial: 'api/v1/partials/pagination', locals: {pagination: @pagination}
 end

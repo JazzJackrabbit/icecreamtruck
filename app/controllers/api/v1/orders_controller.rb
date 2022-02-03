@@ -1,4 +1,6 @@
 class Api::V1::OrdersController < Api::V1::ApiController
+  include Api::V1::ModelPageable
+
   has_scope :by_truck, only: :index
 
   def show
@@ -7,7 +9,9 @@ class Api::V1::OrdersController < Api::V1::ApiController
   end
 
   def index
-    @orders = apply_scopes(Order).order(created_at: :desc)
+    page, per_page = sanitize_page_params(params)
+    @orders = apply_scopes(Order).order(created_at: :desc).page(page).per(per_page)
+    add_pagination_data(@orders, page, per_page)
     render_template 'index', orders: @orders
   end
 
