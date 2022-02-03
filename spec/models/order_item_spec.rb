@@ -8,6 +8,16 @@ RSpec.describe OrderItem, type: :model do
       expect(order_item).not_to be_valid
     end
 
+    it "cannot be updated after creation" do
+      truck = create :truck, :with_products
+      order = create :order, :with_truck_products, truck: truck
+      order_item = order.items.first
+      
+      expect(order_item.update(quantity: 999)).to eq(false)
+      expect(order_item.update(frozen_product_price: 999)).to eq(false)
+      expect(order_item.update(frozen_product_name: 'NewName')).to eq(false)
+    end
+
     it "tests that quantity is above zero" do
       product = create :product
       order = build :order

@@ -14,6 +14,27 @@ RSpec.describe Order, type: :model do
 
       expect(order).not_to be_valid
     end
+
+    it "tests that order status value is within allowed range" do
+      truck = create :truck, :with_products
+      order = build :order, :with_truck_products, truck: truck
+
+      statuses = ['new', 'complete']
+      statuses.each do |value| 
+        order.status = value
+        expect(order).to be_valid
+      end
+
+      order.status = 'undefined'
+      expect(order).not_to be_valid
+    end
+
+    it "cannot be updated after being completed" do
+      truck = create :truck, :with_products
+      order = create :order, :with_truck_products, truck: truck
+      
+      expect(order.update(total_amount: 123)).to eq(false)
+    end
   end
 
   describe ".associations" do    
@@ -36,6 +57,12 @@ RSpec.describe Order, type: :model do
 
   describe "when created" do
     let (:truck) { create :truck, :with_products }
+
+    it "changes its status to complete" do  
+      order = create :order, :with_truck_products, truck: truck, status: Order::STATUS[:new]
+
+      expect(order.status).to eq(Order::STATUS[:complete])
+    end
 
     it "correctly counts total amount from its items" do  
       order = create :order, :with_truck_products, truck: truck
@@ -66,5 +93,13 @@ RSpec.describe Order, type: :model do
 
       expect(order.total_amount).to eq(total_amount)
     end
+  end
+
+  it "does not allow modifications after it has been marked as complete" do
+    truck = create :truck, :with_products  
+    order = create :order, :with_truck_products, truck: truck
+
+    expect(order.update(total_amount: 0)).to eq(false)
+    # expect(order.status).to eq(Order::STATUS[:complete])
   end
 end

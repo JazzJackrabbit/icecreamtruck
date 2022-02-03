@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :order do
     truck
+    status { 'new' }
     total_amount { 9.99 }
 
     trait :with_truck_products do
@@ -9,6 +10,15 @@ FactoryBot.define do
       end
 
       before(:create) do |order,evaluator|
+        products = order.truck.products
+
+        order.truck.products.each do |product|
+          item = build :order_item, order: order, product: product, quantity: evaluator.item_quantity
+          order.items << item
+        end
+      end
+
+      after(:build) do |order,evaluator|
         products = order.truck.products
 
         order.truck.products.each do |product|
