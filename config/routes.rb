@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       
       resources :product_categories, path: :categories, except: [:new, :edit, :destroy]
       resources :products, except: [:new, :edit, :destroy]
-      resources :trucks, only: [:show, :index] do
+      resources :trucks, except: [:new, :edit, :destroy] do
         resources :orders, only: [:index, :create]
         
         get '/inventory', to: 'product_inventories#index'

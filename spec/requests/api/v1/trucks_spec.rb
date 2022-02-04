@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'auth_helper'
 
 describe "GET /api/v1/trucks/:id", type: :request do
   let(:truck) { create :truck, :with_orders }
@@ -48,5 +49,65 @@ describe "GET /api/v1/trucks", type: :request do
     expect(data).to have_key('meta')
     expect(data['meta']['page']).to eq(1)
     expect(data['meta']['total_pages']).to eq(Truck.count)
+  end
+end
+
+describe "POST /api/v1/trucks", type: :request do
+  before {
+    @auth_headers = create_auth_headers
+  }
+  
+  context "when authenticated" do
+    it "creates a new truck" do
+      params = {
+        name: 'New Truck Name',
+      }
+      truck_count = Truck.count
+      post "/api/v1/trucks", params: params, headers: @auth_headers
+      expect(response).to have_http_status(:created)
+      expect(Truck.count).to eq(truck_count+1)
+    end
+  end
+  
+  context "when not authenticated" do
+    it "returns a 401 response" do
+      params = {
+        name: 'New Truck',
+      }
+      post "/api/v1/trucks", params: params
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
+end
+
+describe "PUT /api/v1/trucks/:id", type: :request do
+  before {
+    @truck = create :truck
+    @auth_headers = create_auth_headers
+  }
+
+  context "when authenticated" do
+    it "successfully updates truck" do
+      name =  'New Truck Name'
+      params = {
+        name: name,
+      }
+      
+      put "/api/v1/trucks/#{@truck.id}", params: params, headers: @auth_headers
+      expect(response).to have_http_status(:ok)
+
+      truck = Truck.find(@truck.id)
+      expect(truck.name).to eq(name)
+    end
+  end
+
+  context "when not authenticated" do
+    it "returns a 401 error" do
+      params = {
+        name: 'New Truck Name',
+      }
+      put "/api/v1/trucks/#{@truck.id}", params: params
+      expect(response).to have_http_status(:unauthorized)
+    end
   end
 end
