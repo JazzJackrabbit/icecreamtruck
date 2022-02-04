@@ -1,3 +1,4 @@
+---
 # The Ice Cream Truck App
 
 ![Build Status](https://github.com/simplecov-ruby/simplecov/workflows/stable/badge.svg?branch=main)
@@ -37,7 +38,7 @@ hivemind Procfile
 Run the test suite with ```rspec```. 
 Supplementary coverage report is generated to *(icecreamtruck)/coverage/index.html*.
 
----
+
 ## Documentation
 ### Database Schema
 
