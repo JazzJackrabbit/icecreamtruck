@@ -63,6 +63,7 @@ Lastly, there is a **Merchants** table for admin user authentication and truck m
 ### API Routes
 
 **Customer**
+
 Requests in this section are meant to be accessible by customers.
 
 Request:  `GET /api/v1/trucks`
@@ -153,6 +154,7 @@ Output format:
 ```
 
 **Merchant**
+
 Requests in this section are meant to be accessible by merchant and require authentication with a Bearer token in request headers.
 
 Request: ```POST /api/v1/auth/sign_in```
