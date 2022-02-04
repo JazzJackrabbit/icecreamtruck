@@ -8,6 +8,7 @@ Rails.application.routes.draw do
         sessions: 'api/v1/devise/merchant_sessions',
       }
       
+      resources :products, except: [:new, :edit]
       resources :trucks, only: [:show, :index] do
         resources :orders, only: [:index, :create]
         

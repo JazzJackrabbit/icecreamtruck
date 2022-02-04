@@ -18,3 +18,10 @@ def get_auth_params_from_login_response_headers(response)
   }
   auth_params
 end
+
+def create_auth_headers
+  merchant = create :merchant
+  login(merchant)
+  auth_params = get_auth_params_from_login_response_headers(response)
+  auth_params
+end
