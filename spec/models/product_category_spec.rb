@@ -17,7 +17,9 @@ RSpec.describe ProductCategory, type: :model do
 
   describe ".validations" do
     it "validaes uniqueness of name" do
-      duplicate_category = build :category, name: 'Ice Cream'
+      name = '123'
+      category = create :category, name: name
+      duplicate_category = build :category, name: name
       expect(duplicate_category).not_to be_valid
     end
   end
