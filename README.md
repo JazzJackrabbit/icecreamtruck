@@ -7,7 +7,7 @@ Ice Cream Truck App is a fictional ice cream vendor represented through Ruby on 
 The project is [online](http://icecreamtruck.xyz). You can see available API routes in action on [Postman](https://www.postman.com/science-candidate-75542469/workspace/altera-consulting-public/request/14871795-53a24fd0-7117-4ded-897b-81d962ef533c) (requires a free account).
 
 
----
+
 ## Installation
 ### Requirements
 * Bundler 2.3.4
@@ -59,14 +59,16 @@ Basic data structures look as follows:
 
 Lastly, there is a **Merchants** table for admin user authentication and truck management.
 
----
+
 ### API Routes
 
 **Customer**
 Requests in this section are meant to be accessible by customers.
 
 Request:  `GET /api/v1/trucks`
+
 Description: Retrieves all trucks
+
 Output format:
 ```json
 {
@@ -89,7 +91,9 @@ Output format:
 
 
 Request: `GET /api/v1/trucks/:id`
+
 Description: Retrieves individual truck data
+
 Output format:
 ```json
 {
@@ -111,7 +115,9 @@ Output format:
 
 
 Request: `POST /api/v1/trucks/:truck_id/orders`
+
 Description: Creates an order for truck
+
 Input format: 
 ```json
 {
@@ -150,13 +156,16 @@ Output format:
 Requests in this section are meant to be accessible by merchant and require authentication with a Bearer token in request headers.
 
 Request: ```POST /api/v1/auth/sign_in```
+
 Description: Authenticates user and returns an authentication token.
+
 Input format: 
 ```json
 {
    "email": "merchant@icecreamtruck.xyz",
    "password": 12345678
 }
+
 ```
 Output format (access token and response body): 
 ```json
@@ -183,8 +192,11 @@ Output format (access token and response body):
 ```
 
 Request: ```GET	/api/v1/trucks/:truck_id/orders```
+
 Description: Lists all orders for a given truck.
+
 Input format: requires uid, client and access-token headers
+
 Output format: 
 ```json
 {
@@ -210,8 +222,11 @@ Output format:
 ```
 
 Request: ```GET	/api/v1/trucks/:truck_id/inventory```
+
 Description: List all products and their quantities for a given truck
+
 Input format: requires uid, client and access-token headers
+
 Output format: 
 ```json
 {
@@ -243,15 +258,19 @@ Output format:
 }
 ```
 
-Request ```PUT /api/v1/trucks/:truck_id/inventory```
+Request: ```PUT /api/v1/trucks/:truck_id/inventory```
+
 Description: Update inventory for a given truck
+
 Input format: requires uid, client and access-token headers
+
 ```json
 {
     "product_id": 1,
     "quantity": 150
 }
 ```
+
 Output format: 
 ```json
 {
@@ -268,8 +287,11 @@ Output format:
 ```
 
 Request: ```GET /api/v1/truck/:truck_id/orders```
+
 Description: List all orders for truck
+
 Input format: requires uid, client and access-token headers
+
 Output format:
 ```json
 {
@@ -295,8 +317,11 @@ Output format:
 ```
 
 Request: ```GET /api/v1/orders/:id```
+
 Description: Get detailed order information
+
 Input format: requires uid, client and access-token headers
+
 Output format:
 ```json
 {
