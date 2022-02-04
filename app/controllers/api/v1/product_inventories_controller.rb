@@ -15,6 +15,12 @@ class Api::V1::ProductInventoriesController < Api::V1::ApiController
     render_template 'response', message: 'Inventory was successfully updated', product_inventory: @product_inventory
   end
 
+  # DELETE /api/v1/trucks/:truck_id/inventory
+  def destroy
+    InventoryManager.from_truck_id(params[:truck_id]).destroy(params[:product_id])
+    render json: { message: 'Inventory record was successfully deleted' }, status: :ok
+  end
+
   protected
 
   def inventory_params

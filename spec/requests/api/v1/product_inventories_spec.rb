@@ -2,13 +2,11 @@ require 'rails_helper'
 require 'auth_helper'
 
 describe "PUT /api/v1/trucks/:id/inventory", type: :request do
-  before(:all) { 
-      @truck = create :truck, :with_products
-      @product_inventory = @truck.inventories.where(product_id: @truck.products.first.id).first
-      merchant = create :merchant
-      login(merchant)
-      @auth_params = get_auth_params_from_login_response_headers(response)
-    }
+  before { 
+    @truck = create :truck, :with_products
+    @product_inventory = @truck.inventories.where(product_id: @truck.products.first.id).first
+    @auth_params = create_auth_headers
+  }
 
   context "when authenticated" do
     it 'returns status code 200' do
@@ -89,9 +87,7 @@ end
 describe "GET /api/v1/trucks/:id/inventory", type: :request do
   before(:all) { 
     @truck = create :truck, :with_products
-    merchant = create :merchant
-    login(merchant)
-    @auth_params = get_auth_params_from_login_response_headers(response)
+    @auth_params = create_auth_headers
   }
 
   context "when authorized" do
@@ -111,6 +107,35 @@ describe "GET /api/v1/trucks/:id/inventory", type: :request do
     before { get "/api/v1/trucks/#{@truck.id}/inventory" }
 
     it 'returns status code 401' do
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
+end
+
+describe 'DELETE /api/v1/trucks/:truck_id/inventory' do
+  before { 
+    @truck = create :truck, :with_products
+    @auth_params = create_auth_headers
+  }
+
+  context "when authorized" do
+    it 'destroy truck inventory record' do
+      product_id = @truck.products.first.id
+      params = { 
+        product_id: product_id
+      }
+      delete "/api/v1/trucks/#{@truck.id}/inventory", params: params, headers: @auth_params
+      expect(response).to have_http_status(:ok)
+      expect(@truck.inventory.products.map(&:id)).not_to include(product_id)
+    end
+  end
+
+  context "when not authorized" do
+    it 'returns status code 401' do
+      params = { 
+        product_id: @truck.products.first.id
+      }
+      delete "/api/v1/trucks/#{@truck.id}/inventory", params: params
       expect(response).to have_http_status(:unauthorized)
     end
   end

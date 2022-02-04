@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         
         get '/inventory', to: 'product_inventories#index'
         put '/inventory', to: 'product_inventories#update'
+        delete '/inventory', to: 'product_inventories#destroy'
       end
       get '/orders/:id', to: 'orders#show'
 
