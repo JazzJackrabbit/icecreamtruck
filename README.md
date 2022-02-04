@@ -64,6 +64,7 @@ Lastly, there is a **Merchants** table for admin user authentication and truck m
 
 **Customer**
 
+
 Requests in this section are meant to be accessible by customers.
 
 Request:  `GET /api/v1/trucks`
@@ -91,6 +92,7 @@ Output format:
 ```
 
 
+
 Request: `GET /api/v1/trucks/:id`
 
 Description: Retrieves individual truck data
@@ -113,6 +115,7 @@ Output format:
     }
 }
 ```
+
 
 
 Request: `POST /api/v1/trucks/:truck_id/orders`
@@ -157,6 +160,8 @@ Output format:
 
 Requests in this section are meant to be accessible by merchant and require authentication with a Bearer token in request headers.
 
+
+
 Request: ```POST /api/v1/auth/sign_in```
 
 Description: Authenticates user and returns an authentication token.
@@ -193,6 +198,8 @@ Output format (access token and response body):
 }
 ```
 
+
+
 Request: ```GET	/api/v1/trucks/:truck_id/orders```
 
 Description: Lists all orders for a given truck.
@@ -222,6 +229,8 @@ Output format:
     }
 }
 ```
+
+
 
 Request: ```GET	/api/v1/trucks/:truck_id/inventory```
 
@@ -260,6 +269,8 @@ Output format:
 }
 ```
 
+
+
 Request: ```PUT /api/v1/trucks/:truck_id/inventory```
 
 Description: Update inventory for a given truck
@@ -287,6 +298,8 @@ Output format:
     }
 }
 ```
+
+
 
 Request: ```GET /api/v1/truck/:truck_id/orders```
 
@@ -318,6 +331,8 @@ Output format:
 }
 ```
 
+
+
 Request: ```GET /api/v1/orders/:id```
 
 Description: Get detailed order information
@@ -348,10 +363,10 @@ Output format:
 }
 ```
 
-
 ## Nice-to-have
 
 - Products controller & API end points to create/update products and product categories
+
 
 ## Credits
 
