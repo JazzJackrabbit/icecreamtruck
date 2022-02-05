@@ -45,7 +45,7 @@ Supplementary coverage report is generated to *(icecreamtruck)/coverage/index.ht
 ---
 ### Database Schema
 
-![Build](https://uce22ad804fb51db56099f1f7cbc.previews.dropboxusercontent.com/p/thumb/ABYIgctAqL1aHZoege6TFkEr12hpPV9-m-GE7CANtmzRVf-d1jHrv2VEjQ9dyv-lwqWRBuB3N06LXKbuBnolzDL9X4bKn2y-wlfdf9sP3NWEUHAidjAtXIxc_afXXbe4E8zs4dYPBIwrr1XNP89MtuTNW599ls3UFMPYDWE03eMu7NeNRJOaH_wpsVn_ihIipQl7e6jI8lic-SWqYiqhkrNcMj9PkaFwbuKUOtSgIScCyg7i8v2F9xjWL6LLoLRx5xyY0zazxAwoeaSFPthgzvAT6s1HneWQtQOX2tnZ16TOw3N-BXsi-A39oLPnnj1MpM4sPZOpku8t3aAQT7gzRXx5dPdvyz7G2KUibPUwJAvU9pYlLQlStcuPJUT_aEflDwc/p.png)
+![Build](https://i.imgur.com/n3yWIaE.png)
 
 Basic data structures look as follows:
 
