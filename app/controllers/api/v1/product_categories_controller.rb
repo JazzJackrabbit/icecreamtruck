@@ -13,7 +13,7 @@ class Api::V1::ProductCategoriesController < Api::V1::ApiController
 
   # GET /api/v1/categories
   def index
-    @categories = apply_scopes(ProductCategory).published
+    @categories = apply_scopes(ProductCategory).published.order(id: :asc)
     render_template 'index', categories: @categories
   end
 

@@ -19,7 +19,7 @@ class Api::V1::TrucksController < Api::V1::ApiController
   # GET /api/v1/trucks
   def index
     page, per_page = sanitize_page_params(params)
-    @trucks = Truck.published.page(page).per(per_page)
+    @trucks = Truck.published.order(id: :asc).page(page).per(per_page)
     add_pagination_data(@trucks, page, per_page)
     render_template 'index', trucks: @trucks
   end
