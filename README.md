@@ -6,7 +6,7 @@ Ice Cream Truck is a fictional ice cream vendor represented through Ruby on Rail
 
 The project is [online](http://icecreamtruck.xyz). You can see available API routes in action on [Postman](https://www.postman.com/science-candidate-75542469/workspace/altera-consulting-public/request/14871795-53a24fd0-7117-4ded-897b-81d962ef533c) (requires a free account).
 
-To read a better styled version of this reference document go to [HTML documentation]().
+To read a better styled version of this reference document go to [HTML documentation](http://icecreamtruck.xyz/README).
 
 
 
