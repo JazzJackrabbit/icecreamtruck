@@ -656,7 +656,7 @@ Output format:
 }
 ```
 
-#### Request: ```DELETE /api/v1/products/:id```
+#### Request: ```DELETE /api/v1/categories/:id```
 
 Description: Archives a category and all associated products
 
