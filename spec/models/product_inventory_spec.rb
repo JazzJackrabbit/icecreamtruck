@@ -81,5 +81,4 @@ RSpec.describe ProductInventory, type: :model do
       expect(inventory.quantity).to eq(new_quantity)
     end
   end
-  
 end

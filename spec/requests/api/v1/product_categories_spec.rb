@@ -16,7 +16,7 @@ describe "GET /api/v1/categories/:id", type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it 'response contains information about the product' do
+    it 'response contains information about the category' do
       expect(JSON.parse(response.body)['data']).to have_key('category')
     end
 
@@ -51,8 +51,18 @@ describe "GET /api/v1/categories", type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it 'response contains a list of products' do
+    it 'response contains a list of categories' do
       expect(JSON.parse(response.body)['data']).to have_key('categories')
+    end
+
+    it 'response does not contain archived categories', :skip_before_hook do
+      @auth_headers = create_auth_headers
+      categories = create_list :category, 3
+      category = categories.first
+      category.archive!
+      
+      get "/api/v1/categories", headers: @auth_headers 
+      expect(JSON.parse(response.body)['data']['categories'].map{|x| x['id']}).not_to include(category.id)
     end
 
     it 'the list of categories can be filtered by name', :skip_before_hook do
@@ -131,6 +141,30 @@ describe "PUT /api/v1/categories/:id", type: :request do
         name: 'New Category',
       }
       put "/api/v1/categories/#{@category.id}", params: params
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
+end
+
+describe "DELETE /api/v1/categories/:id", type: :request do
+  before {
+    @category = create :category
+    @auth_headers = create_auth_headers
+  }
+
+  context "when authenticated" do
+    it "successfully archives category" do      
+      delete "/api/v1/categories/#{@category.id}", headers: @auth_headers
+      expect(response).to have_http_status(:ok)
+
+      category = ProductCategory.find(@category.id)
+      expect(category.archived?).to eq(true)
+    end
+  end
+
+  context "when not authenticated" do
+    it "returns a 401 error" do
+      delete "/api/v1/categories/#{@category.id}"
       expect(response).to have_http_status(:unauthorized)
     end
   end

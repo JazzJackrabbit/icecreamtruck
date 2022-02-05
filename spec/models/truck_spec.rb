@@ -108,5 +108,12 @@ RSpec.describe Truck, type: :model do
       expect(truck.inventory.find(destroyed_product_id)).to eq(nil)
     end
   end
+
+  it "can be archived" do
+    truck = create :truck
+    expect(truck).to respond_to(:archive!)
+    truck.archive!
+    expect(Truck.find(truck.id).archived).to eq(true)
+  end
   
 end

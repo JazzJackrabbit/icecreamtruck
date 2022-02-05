@@ -1,7 +1,7 @@
 class Api::V1::TrucksController < Api::V1::ApiController
   include Api::V1::ModelPageable
   include Api::V1::MerchantAuthenticatable
-  before_action :authenticate_merchant!, only: [:create, :update]
+  before_action :authenticate_merchant!, except: [:show, :index]
 
   # GET /api/v1/trucks/:id
   def show
@@ -19,7 +19,7 @@ class Api::V1::TrucksController < Api::V1::ApiController
   # GET /api/v1/trucks
   def index
     page, per_page = sanitize_page_params(params)
-    @trucks = Truck.all.page(page).per(per_page)
+    @trucks = Truck.published.page(page).per(per_page)
     add_pagination_data(@trucks, page, per_page)
     render_template 'index', trucks: @trucks
   end
@@ -29,6 +29,13 @@ class Api::V1::TrucksController < Api::V1::ApiController
     @truck = Truck.find(params[:id])
     @truck.update(truck_params)
     render_template 'response', { message: 'Truck has been updated', truck: @truck }, status: :ok
+  end
+
+  # DELETE /api/v1/trucks/:id
+  def destroy
+    @truck = Truck.find(params[:id])
+    @truck.archive!
+    render json: { message: 'Truck has been permanently archived' }, status: :ok
   end
 
   protected

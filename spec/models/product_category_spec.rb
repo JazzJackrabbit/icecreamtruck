@@ -23,5 +23,20 @@ RSpec.describe ProductCategory, type: :model do
       expect(duplicate_category).not_to be_valid
     end
   end
+
+  it "can be archived" do
+    category = create :category
+    expect(category).to respond_to(:archive!)
+    category.archive!
+    expect(ProductCategory.find(category.id).archived).to eq(true)
+  end
+
+  it "when archived it also archives associated products" do
+    category = create :category
+    product = create :product, category: category
+    expect(category).to respond_to(:archive!)
+    category.archive!
+    expect(Product.find(product.id).archived).to eq(true)
+  end
   
 end

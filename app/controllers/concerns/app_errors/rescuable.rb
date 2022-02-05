@@ -30,6 +30,10 @@ module AppErrors
       rescue_from AppErrors::InventoryErrors::TruckNotFoundError do |e|
         json_response({message: "Truck with such ID could not be found"}, :not_found)
       end
+
+      rescue_from AppErrors::General::ArchivedRecordError do |e|
+        json_response({message: "Cannot perform action. Associated record has been archived."}, :unprocessable_entity)
+      end
     end
 
     protected

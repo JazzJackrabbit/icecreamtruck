@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_03_203036) do
+ActiveRecord::Schema.define(version: 2022_02_04_231904) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,6 +65,7 @@ ActiveRecord::Schema.define(version: 2022_02_03_203036) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "archived", default: false
   end
 
   create_table "product_inventories", force: :cascade do |t|
@@ -84,6 +85,7 @@ ActiveRecord::Schema.define(version: 2022_02_03_203036) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "product_category_id", null: false
     t.string "labels", default: [], array: true
+    t.boolean "archived", default: false
     t.index ["labels"], name: "index_products_on_labels", using: :gin
     t.index ["product_category_id"], name: "index_products_on_product_category_id"
   end
@@ -92,6 +94,7 @@ ActiveRecord::Schema.define(version: 2022_02_03_203036) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "archived", default: false
   end
 
   add_foreign_key "order_items", "orders"

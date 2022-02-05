@@ -7,6 +7,11 @@ module AppErrors
     end 
   end
 
+
+  module General
+    class ArchivedRecordError < AppError; end
+  end
+
   module API
     class RouteNotFoundError < AppError; end
   end

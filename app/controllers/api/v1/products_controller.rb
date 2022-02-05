@@ -17,7 +17,7 @@ class Api::V1::ProductsController < Api::V1::ApiController
   # GET /api/v1/products
   def index
     page, per_page = sanitize_page_params(params)
-    @products = apply_scopes(Product).all.page(page).per(per_page)
+    @products = apply_scopes(Product).published.page(page).per(per_page)
     add_pagination_data(@products, page, per_page)
     render_template 'index', products: @products
   end
@@ -37,12 +37,12 @@ class Api::V1::ProductsController < Api::V1::ApiController
     render_template 'response', { message: 'Product was updated.', product: @product }, status: :ok
   end
 
-  # # DELETE /api/v1/products/:id
-  # def destroy
-  #   @product = Product.find(params[:id])
-  #   @product.destroy
-  #   render json: { status: :success }
-  # end
+  # DELETE /api/v1/trucks/:id
+  def destroy
+    @product = Product.find(params[:id])
+    @product.archive!
+    render json: { message: 'Product has been permanently archived' }, status: :ok
+  end
 
   protected
 

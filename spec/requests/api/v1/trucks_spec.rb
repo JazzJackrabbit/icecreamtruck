@@ -14,6 +14,14 @@ describe "GET /api/v1/trucks/:id", type: :request do
     expect(JSON.parse(response.body)['data']).to have_key('products')
   end
 
+  it 'response does not contain archived products', :skip_before_hook do
+    truck = create :truck, :with_orders
+    product = truck.products.first
+    product.archive!
+    get "/api/v1/trucks/#{truck.id}"
+    expect(JSON.parse(response.body)['data']['products'].map{|x| x['id']}).not_to include(product.id)
+  end
+
   it 'returns a 404 response when truck is not found by id', :skip_before_hook do
     fake_id = 123
 
@@ -40,6 +48,12 @@ describe "GET /api/v1/trucks", type: :request do
 
   it 'response contains a list of trucks' do
     expect(JSON.parse(response.body)['data']).to have_key('trucks')
+  end
+
+  it 'response does not contain archived trucks', :skip_before_hook do
+    truck = create :truck, archived: true
+    get "/api/v1/trucks"
+    expect(JSON.parse(response.body)['data']['trucks'].map{|x| x['id']}).not_to include(truck.id)
   end
 
   it "response contains pagination data", :skip_before_filter do
@@ -107,6 +121,30 @@ describe "PUT /api/v1/trucks/:id", type: :request do
         name: 'New Truck Name',
       }
       put "/api/v1/trucks/#{@truck.id}", params: params
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
+end
+
+describe "DELETE /api/v1/trucks/:id", type: :request do
+  before {
+    @truck = create :truck
+    @auth_headers = create_auth_headers
+  }
+
+  context "when authenticated" do
+    it "successfully archives truck" do      
+      delete "/api/v1/trucks/#{@truck.id}", headers: @auth_headers
+      expect(response).to have_http_status(:ok)
+
+      truck = Truck.find(@truck.id)
+      expect(truck.archived?).to eq(true)
+    end
+  end
+
+  context "when not authenticated" do
+    it "returns a 401 error" do
+      delete "/api/v1/trucks/#{@truck.id}"
       expect(response).to have_http_status(:unauthorized)
     end
   end

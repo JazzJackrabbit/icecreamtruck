@@ -8,9 +8,9 @@ Rails.application.routes.draw do
         sessions: 'api/v1/devise/merchant_sessions',
       }
       
-      resources :product_categories, path: :categories, except: [:new, :edit, :destroy]
-      resources :products, except: [:new, :edit, :destroy]
-      resources :trucks, except: [:new, :edit, :destroy] do
+      resources :product_categories, path: :categories, except: [:new, :edit]
+      resources :products, except: [:new, :edit]
+      resources :trucks, except: [:new, :edit] do
         resources :orders, only: [:index, :create]
         
         get '/inventory', to: 'product_inventories#index'

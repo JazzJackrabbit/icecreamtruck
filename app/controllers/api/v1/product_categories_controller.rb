@@ -13,7 +13,7 @@ class Api::V1::ProductCategoriesController < Api::V1::ApiController
 
   # GET /api/v1/categories
   def index
-    @categories = apply_scopes(ProductCategory).all
+    @categories = apply_scopes(ProductCategory).published
     render_template 'index', categories: @categories
   end
 
@@ -31,6 +31,14 @@ class Api::V1::ProductCategoriesController < Api::V1::ApiController
     
     render_template 'response', { message: 'Category was updated.', category: @category }, status: :ok
   end
+
+  # DELETE /api/v1/trucks/:id
+  def destroy
+    @category = ProductCategory.find(params[:id])
+    @category.archive!
+    render json: { message: 'Category has been permanently archived' }, status: :ok
+  end
+
 
   protected
 

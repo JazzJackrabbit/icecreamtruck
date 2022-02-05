@@ -73,5 +73,12 @@ RSpec.describe Product, type: :model do
       end
     end
   end
+
+  it "can be archived" do
+    product = create :product
+    expect(product).to respond_to(:archive!)
+    product.archive!
+    expect(Product.find(product.id).archived).to eq(true)
+  end
   
 end

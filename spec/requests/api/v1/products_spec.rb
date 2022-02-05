@@ -221,3 +221,27 @@ describe "PUT /api/v1/products/:id", type: :request do
     end
   end
 end
+
+describe "DELETE /api/v1/products/:id", type: :request do
+  before {
+    @product = create :product
+    @auth_headers = create_auth_headers
+  }
+
+  context "when authenticated" do
+    it "successfully archives category" do      
+      delete "/api/v1/products/#{@product.id}", headers: @auth_headers
+      expect(response).to have_http_status(:ok)
+
+      product = Product.find(@product.id)
+      expect(product.archived?).to eq(true)
+    end
+  end
+
+  context "when not authenticated" do
+    it "returns a 401 error" do
+      delete "/api/v1/products/#{@product.id}"
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
+end

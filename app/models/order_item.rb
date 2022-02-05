@@ -1,6 +1,6 @@
 class OrderItem < ApplicationRecord
   belongs_to :order, touch: true
-  belongs_to :product
+  belongs_to :product, touch: true
   has_one :truck, through: :order
   
   validates_uniqueness_of :product_id, :scope => [:order_id]

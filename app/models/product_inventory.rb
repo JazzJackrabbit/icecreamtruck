@@ -6,7 +6,7 @@ class ProductInventory < ApplicationRecord
   # MAX_QUANTITY = 10000
 
   belongs_to :truck, touch: true
-  belongs_to :product
+  belongs_to :product, touch: true
   
   validates_uniqueness_of :truck_id, scope: [:product_id]
   validates_presence_of :quantity
