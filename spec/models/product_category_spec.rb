@@ -38,5 +38,14 @@ RSpec.describe ProductCategory, type: :model do
     category.archive!
     expect(Product.find(product.id).archived).to eq(true)
   end
+
+  it "when archived it changes its name" do
+    category = create :category
+    name = category.name
+    product = create :product, category: category
+    expect(category).to respond_to(:archive!)
+    category.archive!
+    expect(ProductCategory.find(category.id).name).not_to eq(name)
+  end
   
 end
