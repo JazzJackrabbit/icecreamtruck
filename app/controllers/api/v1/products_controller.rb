@@ -5,7 +5,7 @@ class Api::V1::ProductsController < Api::V1::ApiController
 
   has_scope :by_label
   has_scope :by_name
-  has_scope :by_price, using: [:min, :max], only: :index
+  has_scope :by_price, using: %i[min max], type: :hash, allow_blank: true
   has_scope :by_category
 
   # GET /api/v1/products/:id
@@ -18,6 +18,7 @@ class Api::V1::ProductsController < Api::V1::ApiController
   def index
     page, per_page = sanitize_page_params(params)
     @products = apply_scopes(Product).published.page(page).per(per_page)
+    Rails.logger.info current_scopes
     add_pagination_data(@products, page, per_page)
     render_template 'index', products: @products
   end

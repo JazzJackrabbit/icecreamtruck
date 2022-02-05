@@ -1,4 +1,5 @@
 class Product < ApplicationRecord
+  MAX_SEARCHABLE_PRICE=10000
   include Archivable
 
   has_many :inventories, class_name: 'ProductInventory', foreign_key: :product_id
@@ -11,7 +12,7 @@ class Product < ApplicationRecord
 
   scope :by_label, ->(label) { where(':label = ANY(labels)', label: label) }
   scope :by_name, ->(name){where(name: name)}
-  scope :by_price, ->(min = 0, max = Float::INFINITY) { where(price: min..max) }
+  scope :by_price, ->(min_price, max_price = MAX_SEARCHABLE_PRICE) { where(price: min_price..max_price) }
   scope :by_category, ->(category_id) { where(product_category_id: category_id.to_i) }
 
   scope :stocked_in_truck, ->(truck_id) { published.includes(:inventories).where(inventories: { truck_id: truck_id, quantity: 1.. })}
