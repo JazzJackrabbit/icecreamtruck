@@ -8,7 +8,7 @@ class ProductCategory < ApplicationRecord
   scope :by_name, ->(name){where(name: name)}
 
   def archive!
-    name = SecureRandom.alphanumeric(64) #change name to allow future name validations
+    update(name: SecureRandom.alphanumeric(64)) #change name to allow future name validations
     products.each { |p| p.archive! }
     super
   end
