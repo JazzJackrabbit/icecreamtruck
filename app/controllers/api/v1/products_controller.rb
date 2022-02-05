@@ -5,7 +5,7 @@ class Api::V1::ProductsController < Api::V1::ApiController
 
   has_scope :by_label
   has_scope :by_name
-  has_scope :by_price
+  has_scope :by_price, using: [:min, :max], only: :index
   has_scope :by_category
 
   # GET /api/v1/products/:id

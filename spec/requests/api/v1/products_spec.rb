@@ -68,7 +68,7 @@ describe "GET /api/v1/products", type: :request do
       data = JSON.parse(response.body)['data']
       expect(data).to have_key('products')
       expect(data['products'].size).not_to eq(0)
-      expect(data['products']).not_to include(product)
+      expect(data['products'].map {|x| x['id'] }).not_to include(product.id)
     end
 
     it 'the list of products can be filtered by label', :skip_before_hook do
