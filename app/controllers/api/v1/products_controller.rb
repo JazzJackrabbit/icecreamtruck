@@ -17,8 +17,7 @@ class Api::V1::ProductsController < Api::V1::ApiController
   # GET /api/v1/products
   def index
     page, per_page = sanitize_page_params(params)
-    @products = apply_scopes(Product).published.page(page).per(per_page)
-    Rails.logger.info current_scopes
+    @products = apply_scopes(Product).published.order(id: :desc).page(page).per(per_page)
     add_pagination_data(@products, page, per_page)
     render_template 'index', products: @products
   end
