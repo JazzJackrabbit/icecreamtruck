@@ -671,4 +671,4 @@ Output format:
 
 ## Credits
 ---
-Kirill Ragozin for Altera Consulting.
+Kirill Ragozin
