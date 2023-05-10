@@ -1,14 +1,6 @@
 # The Ice Cream Truck
 
-![Build Status](https://github.com/simplecov-ruby/simplecov/workflows/stable/badge.svg?branch=main)
-
 Ice Cream Truck is a fictional ice cream vendor represented through Ruby on Rails API interface. It features end points necessary to conduct business with a said truck. This implementation shows a simplified e-commerce setup and can be easily expanded upon.
-
-The project is [online](http://icecreamtruck.xyz). You can see available API routes in action on [Postman](https://www.postman.com/science-candidate-75542469/workspace/altera-consulting-public/request/14871795-53a24fd0-7117-4ded-897b-81d962ef533c) (requires a free account).
-
-To read a better styled version of this reference document go to [HTML documentation](http://icecreamtruck.xyz/README).
-
-
 
 ## Installation
 ---
