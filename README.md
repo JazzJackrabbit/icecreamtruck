@@ -660,7 +660,3 @@ Output format:
     "message": "Category has been permanently archived"
 }
 ```
-
-## Credits
----
-Kirill Ragozin
